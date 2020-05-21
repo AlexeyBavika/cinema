@@ -28,8 +28,8 @@ public class MovieDaoImpl implements MovieDao {
             if (transaction != null) {
                 transaction.rollback();
             }
-            LOGGER.error("Failed to add movie with id " + movie.getId());
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException("Failed to add movie with id " + movie.getId()
+                    + e.getMessage());
         }
     }
 
@@ -41,8 +41,8 @@ public class MovieDaoImpl implements MovieDao {
             criteriaQuery.from(Movie.class);
             return session.createQuery(criteriaQuery).getResultList();
         } catch (Exception e) {
-            LOGGER.error("Failed to get all movies list.");
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException("Failed to get all movies list."
+                    + e.getMessage());
         }
     }
 }
