@@ -1,6 +1,6 @@
 package com.internet.cinema.model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,7 +20,7 @@ public class MovieSession {
     @ManyToOne
     private CinemaHall cinemaHall;
     @Column(name = "show_time")
-    private LocalDate showTime;
+    private LocalDateTime showTime;
 
     public Long getId() {
         return id;
@@ -46,11 +46,11 @@ public class MovieSession {
         this.cinemaHall = cinemaHall;
     }
 
-    public LocalDate getShowTime() {
+    public LocalDateTime getShowTime() {
         return showTime;
     }
 
-    public void setShowTime(LocalDate showTime) {
+    public void setShowTime(LocalDateTime showTime) {
         this.showTime = showTime;
     }
 }

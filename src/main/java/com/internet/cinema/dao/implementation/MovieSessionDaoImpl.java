@@ -1,6 +1,7 @@
 package com.internet.cinema.dao.implementation;
 
 import com.internet.cinema.dao.MovieSessionDao;
+import com.internet.cinema.exception.DataProcessingException;
 import com.internet.cinema.lib.Dao;
 import com.internet.cinema.model.MovieSession;
 import com.internet.cinema.util.HibernateUtil;
@@ -17,18 +18,13 @@ public class MovieSessionDaoImpl implements MovieSessionDao {
 
     @Override
     public List<MovieSession> findAvailableSessions(Long movieId, LocalDate date) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        try {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Query<MovieSession> query = session.createQuery("FROM MovieSession "
                     + "WHERE show_time = :time");
             query.setParameter("time", date);
             return query.list();
         } catch (Exception e) {
-            throw new RuntimeException("Can`t find available sessions.", e);
-        } finally {
-            if (session != null) {
-                session.close();
-            }
+            throw new DataProcessingException("Can`t find available sessions.", e);
         }
     }
 
@@ -47,7 +43,7 @@ public class MovieSessionDaoImpl implements MovieSessionDao {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new RuntimeException("Can`t add movie session.", e);
+            throw new DataProcessingException("Can`t add movie session.", e);
         } finally {
             if (session != null) {
                 session.close();

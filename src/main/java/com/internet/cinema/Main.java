@@ -8,6 +8,8 @@ import com.internet.cinema.service.CinemaHallService;
 import com.internet.cinema.service.MovieService;
 import com.internet.cinema.service.MovieSessionService;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class Main {
     private static final Injector INJECTOR = Injector.getInstance("com.internet.cinema");
@@ -35,17 +37,19 @@ public class Main {
         firstSession.setMovie(pirates);
         MovieSessionService movieSessionService = (MovieSessionService) INJECTOR
                 .getInstance(MovieSessionService.class);
-        LocalDate firstSessionDate = LocalDate.of(25,12,11);
+        LocalDateTime firstSessionDate = LocalDateTime
+                .of(LocalDate.of(25,12,11), LocalTime.of(10,10));
         firstSession.setShowTime(firstSessionDate);
         firstSession = movieSessionService.add(firstSession);
         MovieSession secondService = new MovieSession();
         secondService.setCinemaHall(blueHall);
         secondService.setMovie(alien);
-        secondService.setShowTime(LocalDate.of(24, 11, 10));
+        secondService.setShowTime(LocalDateTime
+                .of(24, 11, 10,10,10));
         secondService = movieSessionService.add(secondService);
 
         System.out.println("All cinema halls : " + cinemaHallService.getAll() + "\n");
         System.out.println("All available sessions : " + movieSessionService
-                .findAvailableSessions(pirates.getId(), firstSessionDate));
+                .findAvailableSessions(pirates.getId(), LocalDate.of(25, 12, 11)));
     }
 }

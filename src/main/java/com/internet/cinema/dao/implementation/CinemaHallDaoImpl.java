@@ -1,6 +1,7 @@
 package com.internet.cinema.dao.implementation;
 
 import com.internet.cinema.dao.CinemaHallDao;
+import com.internet.cinema.exception.DataProcessingException;
 import com.internet.cinema.lib.Dao;
 import com.internet.cinema.model.CinemaHall;
 import com.internet.cinema.util.HibernateUtil;
@@ -12,7 +13,7 @@ import org.hibernate.Transaction;
 
 @Dao
 public class CinemaHallDaoImpl implements CinemaHallDao {
-    private static final Logger LOGGER = Logger.getLogger(MovieDaoImpl.class);
+    private static final Logger LOGGER = Logger.getLogger(CinemaHallDaoImpl.class);
 
     @Override
     public CinemaHall add(CinemaHall cinemaHall) {
@@ -29,7 +30,7 @@ public class CinemaHallDaoImpl implements CinemaHallDao {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new RuntimeException("Can`t add cinema hall", e);
+            throw new DataProcessingException("Can`t add cinema hall", e);
         } finally {
             if (session != null) {
                 session.close();
@@ -39,18 +40,13 @@ public class CinemaHallDaoImpl implements CinemaHallDao {
 
     @Override
     public List<CinemaHall> getAll() {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        try {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             CriteriaQuery<CinemaHall> criteriaQuery = session.getCriteriaBuilder()
                     .createQuery(CinemaHall.class);
             criteriaQuery.from(CinemaHall.class);
             return session.createQuery(criteriaQuery).list();
         } catch (Exception e) {
-            throw new RuntimeException("Can`t get all cinema halls", e);
-        } finally {
-            if (session != null) {
-                session.close();
-            }
+            throw new DataProcessingException("Can`t get all cinema halls", e);
         }
     }
 }
