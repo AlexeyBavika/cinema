@@ -1,9 +1,10 @@
-package com.internet.cinema.service;
+package com.internet.cinema.service.implementation;
 
 import com.internet.cinema.dao.MovieDao;
 import com.internet.cinema.lib.Inject;
 import com.internet.cinema.lib.Service;
 import com.internet.cinema.model.Movie;
+import com.internet.cinema.service.MovieService;
 import java.util.List;
 
 @Service

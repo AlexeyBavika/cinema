@@ -1,6 +1,7 @@
 package com.internet.cinema.dao.implementation;
 
 import com.internet.cinema.dao.MovieDao;
+import com.internet.cinema.exception.DataProcessingException;
 import com.internet.cinema.lib.Dao;
 import com.internet.cinema.model.Movie;
 import com.internet.cinema.util.HibernateUtil;
@@ -28,8 +29,8 @@ public class MovieDaoImpl implements MovieDao {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new RuntimeException("Failed to add movie with id " + movie.getId()
-                    + e.getMessage());
+            throw new DataProcessingException("Failed to add movie with id " + movie.getId(),
+                    e);
         }
     }
 
@@ -41,8 +42,7 @@ public class MovieDaoImpl implements MovieDao {
             criteriaQuery.from(Movie.class);
             return session.createQuery(criteriaQuery).getResultList();
         } catch (Exception e) {
-            throw new RuntimeException("Failed to get all movies list."
-                    + e.getMessage());
+            throw new DataProcessingException("Failed to get all movies list.", e);
         }
     }
 }
