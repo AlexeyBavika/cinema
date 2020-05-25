@@ -5,7 +5,7 @@ import com.internet.cinema.lib.Inject;
 import com.internet.cinema.lib.Service;
 import com.internet.cinema.model.User;
 import com.internet.cinema.service.UserService;
-import com.internet.cinema.util.HashUtil;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -14,13 +14,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User add(User user) {
-        user.setSalt(HashUtil.getSalt());
-        user.setPassword(HashUtil.hashPassword(user.getPassword(), user.getSalt()));
         return userDao.add(user);
     }
 
     @Override
-    public User findByEmail(String email) {
+    public Optional<User> findByEmail(String email) {
         return userDao.findByEmail(email);
     }
 }

@@ -5,12 +5,15 @@ import com.internet.cinema.exception.DataProcessingException;
 import com.internet.cinema.lib.Dao;
 import com.internet.cinema.model.User;
 import com.internet.cinema.util.HibernateUtil;
+import java.util.Optional;
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 @Dao
 public class UserDaoImpl implements UserDao {
+    private static final Logger LOGGER = Logger.getLogger(UserDaoImpl.class);
 
     @Override
     public User add(User user) {
@@ -21,6 +24,7 @@ public class UserDaoImpl implements UserDao {
             Long userId = (Long) session.save(user);
             user.setId(userId);
             transaction.commit();
+            LOGGER.info("User with id " + userId + " was added.");
             return user;
         } catch (Exception e) {
             if (transaction != null) {
@@ -35,11 +39,11 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User findByEmail(String email) {
+    public Optional<User> findByEmail(String email) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Query<User> query = session.createQuery("FROM User WHERE email = :eml");
             query.setParameter("eml", email);
-            return query.getSingleResult();
+            return query.getResultStream().findFirst();
         } catch (Exception e) {
             throw new DataProcessingException("Can`t find user by email " + email, e);
         }

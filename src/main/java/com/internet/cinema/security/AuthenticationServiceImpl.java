@@ -14,7 +14,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public User login(String email, String password) throws AuthenticationException {
-        User user = userService.findByEmail(email);
+        User user = userService.findByEmail(email).get();
         if (user != null) {
             if (user.getPassword().equals(HashUtil.hashPassword(user.getPassword(),
                     user.getSalt()))) {
@@ -29,15 +29,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public User register(String email, String password) throws AuthenticationException {
-        User user = userService.findByEmail(email);
-        if (user == null) {
-            user = new User();
-            user.setEmail(email);
-            user.setPassword(password);
-            userService.add(user);
-            return user;
-        } else {
-            throw new AuthenticationException("Email " + email + " is already exists.");
-        }
+        User user = new User();
+        user.setEmail(email);
+        user.setPassword(password);
+        user.setSalt(HashUtil.getSalt());
+        user.setPassword(HashUtil.hashPassword(user.getPassword(), user.getSalt()));
+        return userService.add(user);
     }
 }
