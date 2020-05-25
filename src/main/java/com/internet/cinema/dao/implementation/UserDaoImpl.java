@@ -21,10 +21,8 @@ public class UserDaoImpl implements UserDao {
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
-            Long userId = (Long) session.save(user);
-            user.setId(userId);
             transaction.commit();
-            LOGGER.info("User with id " + userId + " was added.");
+            LOGGER.info("User with id " + user.getId() + " was added.");
             return user;
         } catch (Exception e) {
             if (transaction != null) {
@@ -43,7 +41,7 @@ public class UserDaoImpl implements UserDao {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Query<User> query = session.createQuery("FROM User WHERE email = :eml");
             query.setParameter("eml", email);
-            return query.getResultStream().findFirst();
+            return query.uniqueResultOptional();
         } catch (Exception e) {
             throw new DataProcessingException("Can`t find user by email " + email, e);
         }
