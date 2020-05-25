@@ -4,9 +4,11 @@ import com.internet.cinema.lib.Injector;
 import com.internet.cinema.model.CinemaHall;
 import com.internet.cinema.model.Movie;
 import com.internet.cinema.model.MovieSession;
+import com.internet.cinema.model.User;
 import com.internet.cinema.service.CinemaHallService;
 import com.internet.cinema.service.MovieService;
 import com.internet.cinema.service.MovieSessionService;
+import com.internet.cinema.service.UserService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -51,5 +53,13 @@ public class Main {
         System.out.println("All cinema halls : " + cinemaHallService.getAll() + "\n");
         System.out.println("All available sessions : " + movieSessionService
                 .findAvailableSessions(pirates.getId(), LocalDate.of(25, 12, 11)));
+
+        UserService userService = (UserService) INJECTOR.getInstance(UserService.class);
+        User user = new User();
+        user.setEmail("email@gmail.com");
+        user.setPassword("123a");
+        userService.add(user);
+        System.out.println("User by email email@gmail.com : " + userService.findByEmail(user
+                .getEmail()));
     }
 }
