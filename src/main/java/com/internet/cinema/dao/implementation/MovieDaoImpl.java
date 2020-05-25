@@ -20,6 +20,7 @@ public class MovieDaoImpl implements MovieDao {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
+            session.save(movie);
             transaction.commit();
             LOGGER.info("Movie with id " + movie.getId() + " was added.");
             return movie;

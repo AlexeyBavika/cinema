@@ -21,6 +21,7 @@ public class UserDaoImpl implements UserDao {
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
+            session.save(user);
             transaction.commit();
             LOGGER.info("User with id " + user.getId() + " was added.");
             return user;
