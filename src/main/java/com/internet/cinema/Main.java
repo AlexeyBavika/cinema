@@ -9,6 +9,7 @@ import com.internet.cinema.security.AuthenticationService;
 import com.internet.cinema.service.CinemaHallService;
 import com.internet.cinema.service.MovieService;
 import com.internet.cinema.service.MovieSessionService;
+import com.internet.cinema.service.ShoppingCartService;
 import com.internet.cinema.service.UserService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -61,5 +62,15 @@ public class Main {
         authenticationService.register("email@gmail.com", "123a");
         System.out.println("User by email email@gmail.com : " + userService
                 .findByEmail("email@gmail.com"));
+
+        ShoppingCartService shoppingCartService = (ShoppingCartService) INJECTOR
+                .getInstance(ShoppingCartService
+                        .class);
+        System.out.println("Shopping cart of user email@gmail.com : " + shoppingCartService
+                .getByUser(userService.findByEmail("email@gmail.com").get()));
+        shoppingCartService.addSession(firstSession, userService.findByEmail("email@gmail.com")
+                .get());
+        System.out.println("Shopping cart of user email@gmail.com : " + shoppingCartService
+                .getByUser(userService.findByEmail("email@gmail.com").get()));
     }
 }
