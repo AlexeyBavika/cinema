@@ -79,6 +79,7 @@ public class Main {
 
         OrderService orderService = (OrderService) INJECTOR.getInstance(OrderService.class);
         orderService.completeOrder(shoppingCart.getTickets(), firstUser);
+        shoppingCartService.clear(firstUser);
         shoppingCartService.addSession(secondSession, firstUser);
         orderService.completeOrder(shoppingCart.getTickets(), firstUser);
         System.out.println(orderService.getOrderHistory(firstUser));

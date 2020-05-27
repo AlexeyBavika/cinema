@@ -9,6 +9,7 @@ import com.internet.cinema.model.ShoppingCart;
 import com.internet.cinema.model.Ticket;
 import com.internet.cinema.model.User;
 import com.internet.cinema.service.ShoppingCartService;
+import java.util.Collections;
 
 @Service
 public class ShoppingCartServiceImpl implements ShoppingCartService {
@@ -38,5 +39,12 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         ShoppingCart shoppingCart = new ShoppingCart();
         shoppingCart.setUser(user);
         shoppingCartDao.add(shoppingCart);
+    }
+
+    @Override
+    public void clear(User user) {
+        ShoppingCart shoppingCart = shoppingCartDao.getByUser(user);
+        shoppingCart.setTickets(Collections.emptyList());
+        shoppingCartDao.update(shoppingCart);
     }
 }
