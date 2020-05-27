@@ -5,10 +5,13 @@ import com.internet.cinema.lib.Injector;
 import com.internet.cinema.model.CinemaHall;
 import com.internet.cinema.model.Movie;
 import com.internet.cinema.model.MovieSession;
+import com.internet.cinema.model.ShoppingCart;
+import com.internet.cinema.model.User;
 import com.internet.cinema.security.AuthenticationService;
 import com.internet.cinema.service.CinemaHallService;
 import com.internet.cinema.service.MovieService;
 import com.internet.cinema.service.MovieSessionService;
+import com.internet.cinema.service.OrderService;
 import com.internet.cinema.service.ShoppingCartService;
 import com.internet.cinema.service.UserService;
 import java.time.LocalDate;
@@ -45,12 +48,12 @@ public class Main {
                 .of(LocalDate.of(25,12,11), LocalTime.of(10,10));
         firstSession.setShowTime(firstSessionDate);
         firstSession = movieSessionService.add(firstSession);
-        MovieSession secondService = new MovieSession();
-        secondService.setCinemaHall(blueHall);
-        secondService.setMovie(alien);
-        secondService.setShowTime(LocalDateTime
+        MovieSession secondSession = new MovieSession();
+        secondSession.setCinemaHall(blueHall);
+        secondSession.setMovie(alien);
+        secondSession.setShowTime(LocalDateTime
                 .of(24, 11, 10,10,10));
-        secondService = movieSessionService.add(secondService);
+        secondSession = movieSessionService.add(secondSession);
 
         System.out.println("All cinema halls : " + cinemaHallService.getAll() + "\n");
         System.out.println("All available sessions : " + movieSessionService
@@ -59,18 +62,25 @@ public class Main {
         AuthenticationService authenticationService = (AuthenticationService) INJECTOR
                 .getInstance(AuthenticationService.class);
         UserService userService = (UserService) INJECTOR.getInstance(UserService.class);
-        authenticationService.register("email@gmail.com", "123a");
+        User firstUser = authenticationService.register("email@gmail.com", "123a");
         System.out.println("User by email email@gmail.com : " + userService
-                .findByEmail("email@gmail.com"));
+                .findByEmail(firstUser.getEmail()));
 
         ShoppingCartService shoppingCartService = (ShoppingCartService) INJECTOR
                 .getInstance(ShoppingCartService
                         .class);
-        System.out.println("Shopping cart of user email@gmail.com : " + shoppingCartService
-                .getByUser(userService.findByEmail("email@gmail.com").get()));
+        ShoppingCart shoppingCart = shoppingCartService
+                .getByUser(userService.findByEmail("email@gmail.com").get());
+        System.out.println("Shopping cart of user email@gmail.com : " + shoppingCart.toString());
         shoppingCartService.addSession(firstSession, userService.findByEmail("email@gmail.com")
                 .get());
         System.out.println("Shopping cart of user email@gmail.com : " + shoppingCartService
                 .getByUser(userService.findByEmail("email@gmail.com").get()));
+
+        OrderService orderService = (OrderService) INJECTOR.getInstance(OrderService.class);
+        orderService.completeOrder(shoppingCart.getTickets(), firstUser);
+        shoppingCartService.addSession(secondSession, firstUser);
+        orderService.completeOrder(shoppingCart.getTickets(), firstUser);
+        System.out.println(orderService.getOrderHistory(firstUser));
     }
 }
