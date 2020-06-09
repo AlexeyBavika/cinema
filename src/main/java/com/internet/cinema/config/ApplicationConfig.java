@@ -1,12 +1,5 @@
 package com.internet.cinema.config;
 
-import com.internet.cinema.model.CinemaHall;
-import com.internet.cinema.model.Movie;
-import com.internet.cinema.model.MovieSession;
-import com.internet.cinema.model.Order;
-import com.internet.cinema.model.ShoppingCart;
-import com.internet.cinema.model.Ticket;
-import com.internet.cinema.model.User;
 import java.util.Properties;
 import javax.sql.DataSource;
 import org.apache.commons.dbcp2.BasicDataSource;
@@ -46,8 +39,7 @@ public class ApplicationConfig {
         properties.put("hibernate.show_sql", environment.getProperty("hibernate.show_sql"));
         properties.put("hibernate.hbm2ddl.auto", environment.getProperty("hibernate.hbm2ddl.auto"));
         localSessionFactoryBean.setHibernateProperties(properties);
-        localSessionFactoryBean.setAnnotatedClasses(User.class, Ticket.class, ShoppingCart.class,
-                Order.class, MovieSession.class, Movie.class, CinemaHall.class);
+        localSessionFactoryBean.setPackagesToScan("com.internet.cinema.model");
         return localSessionFactoryBean;
     }
 }
