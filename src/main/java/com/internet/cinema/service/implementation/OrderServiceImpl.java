@@ -1,22 +1,19 @@
 package com.internet.cinema.service.implementation;
 
 import com.internet.cinema.dao.OrderDao;
-import com.internet.cinema.dao.ShoppingCartDao;
-import com.internet.cinema.lib.Inject;
-import com.internet.cinema.lib.Service;
 import com.internet.cinema.model.Order;
 import com.internet.cinema.model.Ticket;
 import com.internet.cinema.model.User;
 import com.internet.cinema.service.OrderService;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class OrderServiceImpl implements OrderService {
-    @Inject
+    @Autowired
     private OrderDao orderDao;
-    @Inject
-    private ShoppingCartDao shoppingCartDao;
 
     @Override
     public Order completeOrder(List<Ticket> tickets, User user) {
