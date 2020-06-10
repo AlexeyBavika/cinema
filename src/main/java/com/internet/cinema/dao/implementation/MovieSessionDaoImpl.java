@@ -2,23 +2,26 @@ package com.internet.cinema.dao.implementation;
 
 import com.internet.cinema.dao.MovieSessionDao;
 import com.internet.cinema.exception.DataProcessingException;
-import com.internet.cinema.lib.Dao;
 import com.internet.cinema.model.MovieSession;
-import com.internet.cinema.util.HibernateUtil;
 import java.time.LocalDate;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-@Dao
+@Repository
 public class MovieSessionDaoImpl implements MovieSessionDao {
     private static final Logger LOGGER = Logger.getLogger(MovieSessionDaoImpl.class);
+    @Autowired
+    private SessionFactory sessionFactory;
 
     @Override
     public List<MovieSession> findAvailableSessions(Long movieId, LocalDate date) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             Query<MovieSession> query = session.createQuery("FROM MovieSession "
                     + "WHERE show_time = :time");
             query.setParameter("time", date);
@@ -31,7 +34,7 @@ public class MovieSessionDaoImpl implements MovieSessionDao {
     @Override
     public MovieSession add(MovieSession movieSession) {
         Transaction transaction = null;
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = sessionFactory.openSession();
         try {
             transaction = session.beginTransaction();
             session.save(movieSession);

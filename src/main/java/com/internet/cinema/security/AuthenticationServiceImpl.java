@@ -1,18 +1,18 @@
 package com.internet.cinema.security;
 
 import com.internet.cinema.exception.AuthenticationException;
-import com.internet.cinema.lib.Inject;
-import com.internet.cinema.lib.Service;
 import com.internet.cinema.model.User;
 import com.internet.cinema.service.ShoppingCartService;
 import com.internet.cinema.service.UserService;
 import com.internet.cinema.util.HashUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
-    @Inject
+    @Autowired
     private UserService userService;
-    @Inject
+    @Autowired
     private ShoppingCartService shoppingCartService;
 
     @Override

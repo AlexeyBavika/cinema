@@ -2,22 +2,25 @@ package com.internet.cinema.dao.implementation;
 
 import com.internet.cinema.dao.ShoppingCartDao;
 import com.internet.cinema.exception.DataProcessingException;
-import com.internet.cinema.lib.Dao;
 import com.internet.cinema.model.ShoppingCart;
 import com.internet.cinema.model.User;
-import com.internet.cinema.util.HibernateUtil;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-@Dao
+@Repository
 public class ShoppingCartDaoImpl implements ShoppingCartDao {
     private static final Logger LOGGER = Logger.getLogger(ShoppingCartDaoImpl.class);
+    @Autowired
+    private SessionFactory sessionFactory;
 
     @Override
     public ShoppingCart add(ShoppingCart shoppingCart) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = sessionFactory.openSession();
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
@@ -41,7 +44,7 @@ public class ShoppingCartDaoImpl implements ShoppingCartDao {
 
     @Override
     public ShoppingCart getByUser(User user) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             Query<ShoppingCart> query = session
                     .createQuery("FROM ShoppingCart sc LEFT JOIN FETCH sc.tickets "
                             + "WHERE sc.user = :user", ShoppingCart.class);
@@ -55,7 +58,7 @@ public class ShoppingCartDaoImpl implements ShoppingCartDao {
 
     @Override
     public void update(ShoppingCart shoppingCart) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = sessionFactory.openSession();
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
