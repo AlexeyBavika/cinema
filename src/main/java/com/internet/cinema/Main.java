@@ -17,6 +17,5 @@ public class Main {
         User egor = new User();
         egor.setEmail("egor@gmail.com");
         userService.add(egor);
-
     }
 }

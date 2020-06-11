@@ -4,11 +4,11 @@ import com.internet.cinema.dao.CinemaHallDao;
 import com.internet.cinema.exception.DataProcessingException;
 import com.internet.cinema.model.CinemaHall;
 import java.util.List;
-import javax.persistence.criteria.CriteriaQuery;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -43,12 +43,21 @@ public class CinemaHallDaoImpl implements CinemaHallDao {
     @Override
     public List<CinemaHall> getAll() {
         try (Session session = sessionFactory.openSession()) {
-            CriteriaQuery<CinemaHall> criteriaQuery = session.getCriteriaBuilder()
-                    .createQuery(CinemaHall.class);
-            criteriaQuery.from(CinemaHall.class);
-            return session.createQuery(criteriaQuery).list();
+            Query<CinemaHall> query = session.createQuery("FROM CinemaHall ");
+            return query.getResultList();
         } catch (Exception e) {
             throw new DataProcessingException("Can`t get all cinema halls", e);
+        }
+    }
+
+    @Override
+    public CinemaHall get(Long id) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<CinemaHall> query = session.createQuery("FROM CinemaHall WHERE id = :cnmhl_id");
+            query.setParameter("cnmhl_id", id);
+            return query.uniqueResult();
+        } catch (Exception e) {
+            throw new DataProcessingException("Can`t get cinema hall with id " + id, e);
         }
     }
 }

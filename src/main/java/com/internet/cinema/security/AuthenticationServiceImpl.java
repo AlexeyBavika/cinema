@@ -14,11 +14,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private UserService userService;
     @Autowired
     private ShoppingCartService shoppingCartService;
+    @Autowired
+    private HashUtil hashUtil;
 
     @Override
     public User login(String email, String password) throws AuthenticationException {
         User user = userService.findByEmail(email).get();
-        if (user.getPassword().equals(HashUtil.hashPassword(user.getPassword(),
+        if (user.getPassword().equals(hashUtil.hashPassword(user.getPassword(),
                 user.getSalt()))) {
             return user;
         } else {
@@ -27,12 +29,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public User register(String email, String password) throws AuthenticationException {
+    public User register(String email, String password) {
         User user = new User();
         user.setEmail(email);
         user.setPassword(password);
-        user.setSalt(HashUtil.getSalt());
-        user.setPassword(HashUtil.hashPassword(user.getPassword(), user.getSalt()));
+        user.setSalt(hashUtil.getSalt());
+        user.setPassword(hashUtil.hashPassword(user.getPassword(), user.getSalt()));
         userService.add(user);
         shoppingCartService.registerNewShoppingCart(user);
         return user;
