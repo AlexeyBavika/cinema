@@ -10,23 +10,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/cinema-halls")
 public class CinemaHallController {
     @Autowired
     private CinemaHallService cinemaHallService;
     @Autowired
     private CinemaHallMapper cinemaHallMapper;
 
-    @PostMapping("/cinema-halls")
+    @PostMapping
     public void addCinemaHall(@RequestBody CinemaHallRequestDto cinemaHallRequestDto) {
 
         cinemaHallService.add(cinemaHallMapper
                 .getCinemaHallFromCinemaHallRequestDto(cinemaHallRequestDto));
     }
 
-    @GetMapping("/cinema-halls")
+    @GetMapping
     public List<CinemaHallResponseDto> getCinemaHallResponseDtos() {
         System.out.println(cinemaHallService.getAll());
         return cinemaHallService.getAll().stream()
