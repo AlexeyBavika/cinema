@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -33,6 +34,17 @@ public class MovieDaoImpl implements MovieDao {
             }
             throw new DataProcessingException("Failed to add movie with id " + movie.getId(),
                     e);
+        }
+    }
+
+    @Override
+    public Movie get(Long id) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Movie> query = session.createQuery("FROM Movie WHERE id = :mv_id");
+            query.setParameter("mv_id", id);
+            return query.uniqueResult();
+        } catch (Exception e) {
+            throw new DataProcessingException("Can`t get movie with id " + id, e);
         }
     }
 
