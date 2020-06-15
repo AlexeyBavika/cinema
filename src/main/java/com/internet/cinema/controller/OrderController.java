@@ -11,11 +11,12 @@ import com.internet.cinema.util.mapper.OrderMapper;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -38,8 +39,10 @@ public class OrderController {
     }
 
     @GetMapping
-    public List<OrderResponseDto> getOrderHistory(@RequestParam Long userId) {
-        return orderService.getOrderHistory(userService.get(userId)).stream()
+    public List<OrderResponseDto> getOrderHistory(Authentication authentication) {
+        return orderService.getOrderHistory(userService
+                .findByEmail(((UserDetails) authentication.getPrincipal())
+                        .getUsername()).orElseThrow()).stream()
                 .map(order -> orderMapper.getOrderResponseDtoFromOrder(order))
                 .collect(Collectors.toList());
     }

@@ -23,7 +23,6 @@ public class CinemaHallController {
 
     @PostMapping
     public void addCinemaHall(@RequestBody CinemaHallRequestDto cinemaHallRequestDto) {
-
         cinemaHallService.add(cinemaHallMapper
                 .getCinemaHallFromCinemaHallRequestDto(cinemaHallRequestDto));
     }
