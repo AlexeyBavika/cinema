@@ -27,7 +27,7 @@ public class ShoppingCartController {
     @Autowired
     private ShoppingCartMapper shoppingCartMapper;
 
-    @PostMapping("/addmoviesession")
+    @PostMapping("/add-movie-session")
     public void addMovieSession(Authentication authentication,
                                 @RequestBody ShoppingCartRequestDto shoppingCartRequestDto) {
         shoppingCartService.addSession(movieSessionService.get(shoppingCartRequestDto
@@ -36,7 +36,7 @@ public class ShoppingCartController {
                 .orElseThrow());
     }
 
-    @GetMapping("/byuser")
+    @GetMapping("/by-user")
     public ShoppingCartResponseDto getByUser(Authentication authentication) {
         return shoppingCartMapper
                 .getShoppingCartResponseDtoFromShoppingCart(shoppingCartService
