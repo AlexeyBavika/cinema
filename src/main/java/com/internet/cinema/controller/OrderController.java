@@ -42,7 +42,7 @@ public class OrderController {
     public List<OrderResponseDto> getOrderHistory(Authentication authentication) {
         return orderService.getOrderHistory(userService
                 .findByEmail(((UserDetails) authentication.getPrincipal())
-                        .getUsername()).orElseThrow()).stream()
+                        .getUsername())).stream()
                 .map(order -> orderMapper.getOrderResponseDtoFromOrder(order))
                 .collect(Collectors.toList());
     }

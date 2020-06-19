@@ -32,8 +32,7 @@ public class ShoppingCartController {
                                 @RequestBody ShoppingCartRequestDto shoppingCartRequestDto) {
         shoppingCartService.addSession(movieSessionService.get(shoppingCartRequestDto
                 .getMovieSessionId()), userService
-                .findByEmail(((UserDetails) authentication.getPrincipal()).getUsername())
-                .orElseThrow());
+                .findByEmail(((UserDetails) authentication.getPrincipal()).getUsername()));
     }
 
     @GetMapping("/by-user")
@@ -41,6 +40,6 @@ public class ShoppingCartController {
         return shoppingCartMapper
                 .getShoppingCartResponseDtoFromShoppingCart(shoppingCartService
                         .getByUser(userService.findByEmail(((UserDetails) authentication
-                                .getPrincipal()).getUsername()).orElseThrow()));
+                                .getPrincipal()).getUsername())));
     }
 }

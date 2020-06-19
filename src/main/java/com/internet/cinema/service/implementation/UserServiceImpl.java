@@ -3,7 +3,6 @@ package com.internet.cinema.service.implementation;
 import com.internet.cinema.dao.UserDao;
 import com.internet.cinema.model.User;
 import com.internet.cinema.service.UserService;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +22,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
-        return userDao.findByEmail(email);
+    public User findByEmail(String email) {
+        return userDao.findByEmail(email).orElseThrow();
     }
 }
