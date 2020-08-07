@@ -20,8 +20,12 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
         "com.internet.cinema.security"
 })
 public class ApplicationConfig {
+    private final Environment environment;
+
     @Autowired
-    private Environment environment;
+    public ApplicationConfig(Environment environment) {
+        this.environment = environment;
+    }
 
     @Bean
     public DataSource getDataSource() {
