@@ -5,6 +5,7 @@ import com.internet.cinema.model.Order;
 import com.internet.cinema.model.Ticket;
 import com.internet.cinema.model.User;
 import com.internet.cinema.service.OrderService;
+import com.internet.cinema.service.ShoppingCartService;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +14,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class OrderServiceImpl implements OrderService {
     private final OrderDao orderDao;
+    private final ShoppingCartService shoppingCartService;
 
     @Autowired
-    public OrderServiceImpl(OrderDao orderDao) {
+    public OrderServiceImpl(OrderDao orderDao, ShoppingCartService shoppingCartService) {
         this.orderDao = orderDao;
+        this.shoppingCartService = shoppingCartService;
     }
 
     @Override
@@ -26,6 +29,7 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderDate(LocalDateTime.now());
         order.setUser(user);
         orderDao.add(order);
+        shoppingCartService.clear(user);
         return order;
     }
 

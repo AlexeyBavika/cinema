@@ -4,7 +4,6 @@ import com.internet.cinema.exception.AuthenticationException;
 import com.internet.cinema.model.User;
 
 public interface AuthenticationService {
-    User login(String email, String password) throws AuthenticationException;
 
     /**
      * We should register a new user. New user entity will contains the email and password
